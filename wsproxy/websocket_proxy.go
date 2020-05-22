@@ -192,7 +192,6 @@ func (p *Proxy) proxy(w http.ResponseWriter, r *http.Request) {
 	if swsp := r.Header.Get("Sec-WebSocket-Protocol"); swsp != "" {
 		request.Header.Set("Authorization", transformSubProtocolHeader(swsp))
 	}
-	
 	for header := range r.Header {
 		if p.headerForwarder(header) {
 			request.Header.Set(header, r.Header.Get(header))
