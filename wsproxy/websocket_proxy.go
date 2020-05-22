@@ -206,7 +206,7 @@ func (p *Proxy) proxy(w http.ResponseWriter, r *http.Request) {
 		p.logger.Warnln("cookie is %+v", cookie)
 	}
 	
-	if auth := r.Header.Get("Auth"); auth != "" {
+	if auth := r.Header.Get("Auth"); auth != "" && strings.HasPrefix(auth, "Bearer ") {
 		request.Header.Set("Authorization", auth)
 		p.logger.Warnln("auth is %s", auth)
 	}
