@@ -205,10 +205,10 @@ func (p *Proxy) proxy(w http.ResponseWriter, r *http.Request) {
 	if auth := r.Header.Get("Auth"); auth != "" && strings.HasPrefix(auth, "Bearer ") {
 		request.Header.Set("Authorization", auth)
 	}
-	
 	if m := r.URL.Query().Get(p.methodOverrideParam); m != "" {
 		request.Method = m
 	}
+	
 	if p.requestMutator != nil {
 		request = p.requestMutator(r, request)
 	}
