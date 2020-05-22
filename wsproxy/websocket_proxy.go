@@ -192,6 +192,7 @@ func (p *Proxy) proxy(w http.ResponseWriter, r *http.Request) {
 	if swsp := r.Header.Get("Sec-WebSocket-Protocol"); swsp != "" {
 		request.Header.Set("Authorization", transformSubProtocolHeader(swsp))
 	}
+	p.logger.Warnln("Sec-WebSocket-Protocol is %s", swsp)
 	for header := range r.Header {
 		if p.headerForwarder(header) {
 			request.Header.Set(header, r.Header.Get(header))
@@ -201,6 +202,7 @@ func (p *Proxy) proxy(w http.ResponseWriter, r *http.Request) {
 	if cookie, err := r.Cookie(p.tokenCookieName); err == nil {
 		request.Header.Set("Authorization", "Bearer "+cookie.Value)
 	}
+	p.logger.Warnln("cookie is %s", cookie)
 	if m := r.URL.Query().Get(p.methodOverrideParam); m != "" {
 		request.Method = m
 	}
