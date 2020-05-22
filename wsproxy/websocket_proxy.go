@@ -206,6 +206,11 @@ func (p *Proxy) proxy(w http.ResponseWriter, r *http.Request) {
 		p.logger.Warnln("cookie is %+v", cookie)
 	}
 	
+	if auth := r.Header.Get("Auth"); auth != "" {
+		request.Header.Set("Authorization", auth)
+		p.logger.Warnln("auth is %s", auth)
+	}
+	
 	if m := r.URL.Query().Get(p.methodOverrideParam); m != "" {
 		request.Method = m
 	}
