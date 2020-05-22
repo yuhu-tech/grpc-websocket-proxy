@@ -201,6 +201,10 @@ func (p *Proxy) proxy(w http.ResponseWriter, r *http.Request) {
 	if cookie, err := r.Cookie(p.tokenCookieName); err == nil {
 		request.Header.Set("Authorization", "Bearer "+cookie.Value)
 	}
+	// support react-native websocket
+	if auth := r.Header.Get("Auth"); auth != "" && strings.HasPrefix(auth, "Bearer ") {
+		request.Header.Set("Authorization", auth)
+	}
 	if m := r.URL.Query().Get(p.methodOverrideParam); m != "" {
 		request.Method = m
 	}
