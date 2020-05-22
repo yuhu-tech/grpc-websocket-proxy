@@ -189,10 +189,8 @@ func (p *Proxy) proxy(w http.ResponseWriter, r *http.Request) {
 		p.logger.Warnln("error preparing request:", err)
 		return
 	}
-	p.logger.Warnln("r is %+v", r.Header)
 	if swsp := r.Header.Get("Sec-WebSocket-Protocol"); swsp != "" {
 		request.Header.Set("Authorization", transformSubProtocolHeader(swsp))
-		p.logger.Warnln("Sec-WebSocket-Protocol is %s", swsp)
 	}
 	
 	for header := range r.Header {
@@ -203,12 +201,10 @@ func (p *Proxy) proxy(w http.ResponseWriter, r *http.Request) {
 	// If token cookie is present, populate Authorization header from the cookie instead.
 	if cookie, err := r.Cookie(p.tokenCookieName); err == nil {
 		request.Header.Set("Authorization", "Bearer "+cookie.Value)
-		p.logger.Warnln("cookie is %+v", cookie)
 	}
-	
+	// support react-native websocket
 	if auth := r.Header.Get("Auth"); auth != "" && strings.HasPrefix(auth, "Bearer ") {
 		request.Header.Set("Authorization", auth)
-		p.logger.Warnln("auth is %s", auth)
 	}
 	
 	if m := r.URL.Query().Get(p.methodOverrideParam); m != "" {
